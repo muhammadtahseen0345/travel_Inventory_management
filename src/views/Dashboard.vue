@@ -44,29 +44,31 @@
       </v-dialog>
     </v-col>
     <v-col cols="12" sm="6" md="4">
-       <v-text-field label="Client No*" required></v-text-field> 
+       <v-text-field 
+       v-model="client_no"
+       label="Client No*" required></v-text-field> 
     </v-col>
     <v-col cols="12" sm="6" md="4">
-       <v-text-field label="Invoice*" required></v-text-field> 
+       <v-text-field   v-model="invoice" label="Invoice*" required></v-text-field> 
     </v-col>
   </v-row>
          <v-row>
               <v-col cols="12" sm="6">
-       <v-text-field label="Ticket NO.*" required></v-text-field> 
+       <v-text-field  v-model="ticket_no" label="Ticket NO.*" required></v-text-field> 
     </v-col>
      <v-col cols="12" sm="6">
-       <v-text-field label="Passenger*" required></v-text-field> 
+       <v-text-field  v-model="passenger" label="Passenger*" required></v-text-field> 
     </v-col>
          </v-row>
           <v-row>
               <v-col cols="12" sm="6">
-       <v-text-field label="Sector*" required></v-text-field> 
+       <v-text-field  v-model="sector" label="Sector*" required></v-text-field> 
     </v-col>
      <v-col cols="12" sm="3">
-       <v-text-field label="Face*" required></v-text-field> 
+       <v-text-field  v-model="face" label="Face*" required></v-text-field> 
     </v-col>
       <v-col cols="12" sm="3">
-       <v-text-field label="Taxes*" required></v-text-field> 
+       <v-text-field  v-model="taxes" label="Taxes*" required></v-text-field> 
     </v-col>
          </v-row>
              
@@ -78,7 +80,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+          <v-btn color="blue darken-1" text @click="readRefs()">Save</v-btn>
         </v-card-actions>
       </v-card>
       </div>
@@ -115,6 +117,14 @@
     data () {
       return {
         search: '',
+        invoice:"",
+        client_no:"",
+        ticket_no:"",
+        passenger:"",
+        sector:"",
+        face:"",
+        taxes:"",
+
          dialog: false,
        date: new Date().toISOString().substr(0, 10),
       menu: false,
@@ -132,6 +142,7 @@
           { text: 'Passenger', value: 'carbs' },
           { text: 'Sector', value: 'protein' },
           { text: 'Fare', value: 'iron' },
+          { text: 'Taxes', value: 'iron' },
           { text: 'Sp', value: 'iron' },
           { text: 'Kb', value: 'iron' },
           { text: 'Net', value: 'iron' },
@@ -220,6 +231,11 @@
         ],
       }
     },
+      methods: {
+    readRefs: function() {
+      console.log(this.invoice,this.client_no,this.ticket_no,this.passenger,this.sector,this.face,this.taxes,this.date);
+      
+    }},
   }
 </script>
 <style>

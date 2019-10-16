@@ -6,7 +6,7 @@
   <div class="round3">
   <v-card>
     <v-card-title>
-     Void/Refund
+    <h3> Debit Note</h3>
       <div class="flex-grow-1"></div>
       <v-text-field
         v-model="search"
@@ -44,15 +44,13 @@
             sortable: false,
             value: 'name',
           },
-          { text: 'Invoice', value: 'calories' },
-          { text: 'Ticket No.', value: 'fat' },
-          { text: 'Passenger', value: 'carbs' },
-          { text: 'Sector', value: 'protein' },
-          { text: 'Fare', value: 'iron' },
-          { text: 'Taxes', value: 'iron' },
-          { text: 'Sp', value: 'iron' },
-          { text: 'Kb', value: 'iron' },
-          { text: 'Net', value: 'iron' },
+          { text: 'Debit Note NO.', value: 'calories' },
+          { text: 'XO Number', value: 'fat' },
+          { text: 'Remarks', value: 'carbs' },
+          { text: 'Debit', value: 'protein' },
+          { text: 'Credit', value: 'iron' },
+          { text: 'Net Amount', value: 'iron' },
+          
         ],
         desserts: [
           {
