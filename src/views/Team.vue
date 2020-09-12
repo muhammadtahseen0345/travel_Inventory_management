@@ -1,142 +1,309 @@
 <template>
-<div>
-  
-  <br/>
-  <br/>
-  <div class="round3">
-  <v-card>
-    <v-card-title>
-     Void/Refund
-      <div class="flex-grow-1"></div>
-      <v-text-field
-        v-model="search"
-        append-icon="search"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-card-title>
-    <v-data-table
-       dense
-      :headers="headers"
-      :items="desserts"
-      :search="search"
-    ></v-data-table>
-  
-  </v-card>
-  </div>
+<div class="round3">
+
+  <v-data-table
+ v-model="selected"
+ :search="search"
+    :headers="headers"
+    :items="desserts"
+    :single-select="singleSelect"
+    item-key="name"
+    show-select
+    dense
+    class="elevation-1"
+  >
+    <template v-slot:top>
+      <v-toolbar flat color="white">
+        <v-toolbar-title><h3>VOID/REFUND</h3></v-toolbar-title>
+        <v-divider
+          class="mx-4"
+          inset
+          vertical
+        ></v-divider>
+        <v-spacer></v-spacer>
+         <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+         
+        <v-dialog v-model="dialog" max-width="500px">
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+          </template>
+
+          <v-card>
+            <div class="round3">
+            <v-card-title>
+              <span class="headline">{{ formTitle }}</span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-container>
+               <!-- <v-row>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.name" label="Travel Agency Name"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.calories" label="Address"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.fat" label="E-mail"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="editedItem.carbs" label="Contact#"></v-text-field>
+                  </v-col>
+                 
+                </v-row>-->
+                   <v-row>
+                 <!-- <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-dialog
+                        ref="dialog"
+                        v-model="modal"
+                        :return-value.sync="editedItem.date"
+                        persistent
+                        width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            v-model="date"
+                            label="Picker in dialog"
+                            prepend-icon="event"
+                            readonly
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker v-model="date" scrollable>
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
+                          <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+                        </v-date-picker>
+                      </v-dialog>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.name" label="Travel Agency Name*" required></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.calories" label="Address*" required></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <v-text-field v-model="editedItem.fat" label="E-mail*" required></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field v-model="editedItem.carbs" label="Contact#*" required></v-text-field>
+                    </v-col>
+                  </v-row>-->
+                   <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-dialog
+                        ref="dialog"
+                        v-model="modal"
+                        :return-value.sync="editedItem.date"
+                        persistent
+                        width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            v-model="date"
+                            label="Picker in dialog"
+                            prepend-icon="event"
+                            readonly
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker v-model="date" scrollable>
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
+                          <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+                        </v-date-picker>
+                      </v-dialog>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.client_no" label="Client No*" required></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field v-model="editedItem.invoice" label="Invoice*" required></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <v-text-field v-model="editedItem.ticket_no" label="Ticket NO.*" required></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <v-text-field v-model="editedItem.passenger" label="Passenger*" required></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <v-text-field v-model="editedItem.sector" label="Sector*" required></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="3">
+                      <v-text-field v-model="editedItem.fare" label="Fare*" required></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="3">
+                      <v-text-field v-model="editedItem.taxes" label="Taxes*" required></v-text-field>
+                    </v-col>
+                  </v-row>
+                  
+                </v-row>
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+            </v-card-actions>
+            </div>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+    </template>
+    <template v-slot:item.action="{ item }">
+      <v-icon
+      color="pink"
+        small
+        class="mr-2"
+        @click="editItem(item)"
+      >
+        edit
+      </v-icon>
+      <v-icon
+      color="black"
+        small
+        @click="deleteItem(item)"
+      >
+        delete
+      </v-icon>
+    </template>
+    
+  </v-data-table>
 </div>
 </template>
 <script>
   export default {
-    data () {
-      return {
-        search: '',
-         dialog: false,
-       date: new Date().toISOString().substr(0, 10),
+    data: () => ({
+     search: "",
+      invoice: "",
+      client_no: "",
+      ticket_no: "",
+      passenger: "",
+      sector: "",
+      face: "",
+      taxes: "",
+      output: null,
+      dialog: false,
+      date: new Date().toISOString().substr(0, 10),
       menu: false,
+      hello: "",
       modal: false,
       menu2: false,
-        headers: [
-          {
-            text: 'Date',
-            align: 'left',
-            sortable: false,
-            value: 'name',
-          },
-          { text: 'Invoice', value: 'calories' },
-          { text: 'Ticket No.', value: 'fat' },
-          { text: 'Passenger', value: 'carbs' },
-          { text: 'Sector', value: 'protein' },
-          { text: 'Fare', value: 'iron' },
-          { text: 'Taxes', value: 'iron' },
-          { text: 'Sp', value: 'iron' },
-          { text: 'Kb', value: 'iron' },
-          { text: 'Net', value: 'iron' },
-        ],
-        desserts: [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-            iron: '1%',
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-            iron: '1%',
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-            iron: '7%',
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-            iron: '8%',
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
-            iron: '16%',
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-            iron: '0%',
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-            iron: '2%',
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-            iron: '45%',
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-            iron: '22%',
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-            iron: '6%',
-          },
-        ],
-      }
+      singleSelect: true,
+        selected: [],
+      
+      headers: [
+        {
+          text: "Date",
+          align: "left",
+          sortable: false,
+          value: "date"
+        },
+        { text: "Invoice", value: "invoice" },
+        { text: "Client No", value: "client_no" },
+        { text: "Ticket No.", value: "ticket_no" },
+        { text: "Passenger", value: "passenger" },
+        { text: "Sector", value: "sector" },
+        { text: "Fare", value: "fare" },
+        { text: "Taxes", value: "taxes" },
+        { text: "Sp", value: "sp" },
+        { text: "Kb", value: "kb" },
+        { text: "Net", value: "net" },
+        { text: 'Actions', value: 'action', sortable: false },
+      ],
+      desserts: [],
+      editedIndex: -1,
+      editedItem: {
+       invoice:'',
+       ticket_no:'',
+       client_no:'',
+       passenger:'',
+       sector:'',
+       fare:'',
+       taxes:'',
+       sp:'',
+       kb:'',
+       net:'',
+       date:''
+      },
+      defaultItem: {
+        invoice:'',
+       ticket_no:'',
+       passenger:'',
+       sector:'',
+       fare:'',
+       taxes:'',
+       sp:'',
+       kb:'',
+       net:'',
+       date:'',
+      },
+    }),
+
+    computed: {
+      formTitle () {
+        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      },
+    },
+
+    watch: {
+      dialog (val) {
+        val || this.close()
+      },
+    },
+
+    created () {
+      this.initialize()
+    },
+
+    methods: {
+      initialize () {
+        this.desserts = [
+          
+        ]
+      },
+
+      editItem (item) {
+        this.editedIndex = this.desserts.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
+      },
+
+      deleteItem (item) {
+        const index = this.desserts.indexOf(item)
+        confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+      },
+
+      close () {
+        this.dialog = false
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        }, 300)
+      },
+
+      save () {
+        if (this.editedIndex > -1) {
+          Object.assign(this.desserts[this.editedIndex], this.editedItem)
+        } else {
+          this.desserts.push(this.editedItem)
+        }
+        this.close()
+      },
     },
   }
 </script>
